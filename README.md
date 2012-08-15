@@ -1,0 +1,4 @@
+HaskellSolver
+=============
+
+Haskell Solver
