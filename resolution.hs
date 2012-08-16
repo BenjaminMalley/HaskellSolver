@@ -1,3 +1,8 @@
+module Resolution (
+	Sentence(..),
+	resolution
+) where
+
 import Data.List (nub, delete, find)
 
 --http://johantibell.com/files/stanford-2011/performance.html#(18)
@@ -14,11 +19,11 @@ data Sentence = And Sentence Sentence
 
 --puts a sentence into conjunctive normal form (Ands of Ors).	
 cnf :: Sentence -> Sentence
-cnf (Iff a b) = cnf $ And (cnf (If a b)) (cnf (If b a))
-cnf (If a b) = cnf $ Or (Not (cnf a)) (cnf b)
+cnf (Iff a b) = cnf $ And (cnf $ If a b) (cnf $ If b a)
+cnf (If a b) = cnf $ Or (Not $ cnf a) (cnf b)
 cnf (Not (Not a)) = cnf a
-cnf (Not (And a b)) = cnf $ Or (Not (cnf a)) (Not (cnf b))
-cnf (Not (Or a b)) = And (Not (cnf a)) (Not (cnf b))
+cnf (Not (And a b)) = cnf $ Or (Not $ cnf a) (Not $ cnf b)
+cnf (Not (Or a b)) = And (Not $ cnf a) (Not $ cnf b)
 cnf (Or (And b c) a) = cnf $ And (Or a b) (Or a c)
 cnf (Or a (And b c)) = cnf $ And (Or a b) (Or a c)
 cnf (And a b) = And (cnf a) (cnf b)
